@@ -3,6 +3,53 @@
 {% block title %}Search Results{% endblock %}
 
 {% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<script>
+$(function () {
+	var measured_dates ={{dates|tojson}}
+	var mentioned_times = {{values}}
+
+    $('#container').highcharts({
+        title: {
+            text: 'The Number of Mentioned Times on US Mainstrem Media',
+            x: -20 
+        },
+        subtitle: {
+            text: 'Source: mediacloud.com',
+            x: -20
+        },
+        xAxis: {
+            categories: measured_dates
+        },
+        yAxis: {
+            title: {
+                text: 'Mentioned Times'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'US Mainstream Media',
+            data: mentioned_times
+        }]
+    });
+});
+</script>
+
+
 
 <div class="row">
 
@@ -12,7 +59,9 @@
 
     <p>You searched for "{{keywords}}"</p>
 
-    <p>In the US Mainstream Media online there have {{ sentenceCount }} sentences matching your search so far this year.</p>
+    <p>In the US Mainstream Media online there have {{ sentenceCount }} sentences matching your search from {{startday}} to {{endday}}.</p>
+
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
   </div>
 
